@@ -3,7 +3,6 @@ dist
 build
 coverage
 .git
-.gitignore
 .vscode
 .idea
 .DS_Store
@@ -14,5 +13,5 @@ yarn-error.log*
 pnpm-debug.log*
 .env
 .env.*
-Dockerfile*
-docker-compose*.yml
+.cursor
+.agents
