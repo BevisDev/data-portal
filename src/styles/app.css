@@ -1,0 +1,187 @@
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 20% -30%, rgba(76, 201, 240, 0.25), transparent 38%),
+    radial-gradient(circle at 100% 0, rgba(67, 97, 238, 0.24), transparent 30%),
+    #f3f6fb;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.auth-page {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.auth-card {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.auth-card .ant-card-body {
+  height: 100%;
+}
+
+.session-warning {
+  background: #fff8e6;
+  border: 1px solid #ffd166;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.brand-wrap {
+  padding: 20px 16px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 78px;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: linear-gradient(138deg, #4895ef 0%, #4361ee 72%);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+}
+
+.brand-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.app-header {
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.header-chip-group {
+  margin-bottom: 12px;
+}
+
+.page-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metric-card {
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.07);
+}
+
+.app-footer {
+  text-align: center;
+  color: #64748b;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 14px 24px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.permission-line {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.auth-slider-wrap {
+  background: #0f172a;
+  height: 100vh;
+}
+
+.auth-slide {
+  position: relative;
+  height: 100vh;
+}
+
+.auth-slide-image {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+}
+
+.auth-slide-content {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 34px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.auth-slide-content .ant-typography {
+  color: #ffffff;
+}
+
+.auth-slide-content .ant-typography-secondary {
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.auth-panel {
+  min-height: 100vh;
+  padding: 28px;
+  background: #ffffff;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-panel-inner {
+  width: 100%;
+  max-width: 440px;
+}
+
+@media (max-width: 991px) {
+  .auth-page {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .auth-slider-wrap,
+  .auth-slide,
+  .auth-slide-image,
+  .auth-panel {
+    min-height: auto;
+    height: auto;
+  }
+
+  .auth-panel {
+    display: block;
+  }
+
+  .auth-panel-inner {
+    max-width: none;
+  }
+
+  .auth-slide-image {
+    max-height: 280px;
+  }
+
+  .auth-card {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+  }
+}

@@ -1,0 +1,19 @@
+<svg width="1000" height="720" viewBox="0 0 1000 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="720" fill="#0B1120"/>
+  <circle cx="250" cy="140" r="180" fill="#1D4ED8" fill-opacity="0.35"/>
+  <circle cx="840" cy="600" r="240" fill="#06B6D4" fill-opacity="0.25"/>
+  <rect x="120" y="190" width="760" height="380" rx="24" fill="#0F172A" stroke="#334155"/>
+  <rect x="170" y="235" width="240" height="18" rx="9" fill="#60A5FA"/>
+  <rect x="170" y="270" width="360" height="14" rx="7" fill="#475569"/>
+  <rect x="170" y="320" width="52" height="180" rx="12" fill="#1E40AF"/>
+  <rect x="250" y="380" width="52" height="120" rx="12" fill="#2563EB"/>
+  <rect x="330" y="350" width="52" height="150" rx="12" fill="#3B82F6"/>
+  <rect x="410" y="290" width="52" height="210" rx="12" fill="#60A5FA"/>
+  <rect x="490" y="335" width="52" height="165" rx="12" fill="#93C5FD"/>
+  <polyline points="620,460 670,410 720,430 770,350 820,370" stroke="#22D3EE" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="620" cy="460" r="9" fill="#22D3EE"/>
+  <circle cx="670" cy="410" r="9" fill="#22D3EE"/>
+  <circle cx="720" cy="430" r="9" fill="#22D3EE"/>
+  <circle cx="770" cy="350" r="9" fill="#22D3EE"/>
+  <circle cx="820" cy="370" r="9" fill="#22D3EE"/>
+</svg>
