@@ -1,7 +1,7 @@
 import { Card, Col, Descriptions, Row, Space, Tag, Typography } from "antd";
-import { useAccess } from "../hooks/useAccess";
-import { PERMISSION_LABELS } from "../types/platform";
-import { formatSessionExpiry } from "../utils/platform";
+import { useAccess } from "../../hooks/useAccess";
+import { PERMISSION_LABELS } from "../../types/platform";
+import { formatSessionExpiry } from "../../utils/platform";
 
 export function ProfilePage() {
   const { session, currentUser, permissions, roles } = useAccess();

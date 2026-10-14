@@ -1,0 +1,13 @@
+export { LoginPage } from "./auth/LoginPage";
+export { DashboardPage } from "./dashboard/DashboardPage";
+export { ProfilePage } from "./account/ProfilePage";
+export { PermissionsPage } from "./admin/PermissionsPage";
+export { RolesPage } from "./admin/RolesPage";
+export { UsersPage } from "./admin/UsersPage";
+export { RecordsPage } from "./data/RecordsPage";
+export { WhitePage } from "./common/WhitePage";
+export { DefinitionsPage } from "./notification/definitions/DefinitionsPage";
+export { SendNotificationPage } from "./notification/send/SendNotificationPage";
+export { SourcesTargetsPage } from "./notification/sources-targets/SourcesTargetsPage";
+export { TemplatesPage } from "./notification/templates/TemplatesPage";
+export { WebhooksPage } from "./notification/webhooks/WebhooksPage";

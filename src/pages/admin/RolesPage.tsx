@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { App, Button, Checkbox, Form, Input, Modal, Space, Table, Tag, Typography } from "antd";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { useAccess } from "../hooks/useAccess";
-import { usePlatformStore } from "../store/platformStore";
-import { ALL_PERMISSIONS, PERMISSION_LABELS } from "../types/platform";
-import type { RoleRecord } from "../types/platform";
+import { useAccess } from "../../hooks/useAccess";
+import { usePlatformStore } from "../../store/platformStore";
+import { ALL_PERMISSIONS, PERMISSION_LABELS } from "../../types/platform";
+import type { RoleRecord } from "../../types/platform";
 
 type RoleFormInput = Omit<RoleRecord, "id">;
 

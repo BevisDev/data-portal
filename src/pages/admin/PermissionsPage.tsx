@@ -1,6 +1,6 @@
 import { Card, Col, Row, Space, Tag, Typography } from "antd";
-import { useAccess } from "../hooks/useAccess";
-import { ALL_PERMISSIONS, PERMISSION_LABELS } from "../types/platform";
+import { useAccess } from "../../hooks/useAccess";
+import { ALL_PERMISSIONS, PERMISSION_LABELS } from "../../types/platform";
 
 export function PermissionsPage() {
   const { permissions } = useAccess();

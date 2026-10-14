@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Card, Col, Row, Space, Statistic, Table, Tag, Typography } from "antd";
 import { Column, Pie } from "@ant-design/charts";
-import { usePlatformStore } from "../store/platformStore";
+import { usePlatformStore } from "../../store/platformStore";
 
 export function DashboardPage() {
   const records = usePlatformStore((state) => state.records);

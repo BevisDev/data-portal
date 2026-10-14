@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { App, Button, Form, Input, Modal, Select, Space, Table, Tag, Typography } from "antd";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { useAccess } from "../hooks/useAccess";
-import { useAuthStore } from "../store/authStore";
-import { usePlatformStore } from "../store/platformStore";
-import type { UserRecord } from "../types/platform";
+import { useAccess } from "../../hooks/useAccess";
+import { useAuthStore } from "../../store/authStore";
+import { usePlatformStore } from "../../store/platformStore";
+import type { UserRecord } from "../../types/platform";
 
 type UserFormInput = Omit<UserRecord, "id">;
 

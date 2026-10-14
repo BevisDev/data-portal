@@ -7,6 +7,8 @@ export const ALL_PERMISSIONS = [
   "role:read",
   "role:manage",
   "permission:read",
+  "notification:read",
+  "notification:manage",
 ] as const;
 
 export type Permission = (typeof ALL_PERMISSIONS)[number];
@@ -55,4 +57,6 @@ export const PERMISSION_LABELS: Record<Permission, string> = {
   "role:read": "Read role catalog",
   "role:manage": "Manage role definitions",
   "permission:read": "Read permissions matrix",
+  "notification:read": "Read notification configuration",
+  "notification:manage": "Manage notification configuration and send tests",
 };

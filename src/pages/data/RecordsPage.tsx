@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { App, Button, Form, Input, Modal, Select, Space, Table, Tag, Typography } from "antd";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { useAccess } from "../hooks/useAccess";
-import { usePlatformStore } from "../store/platformStore";
-import type { DataRecord } from "../types/platform";
+import { useAccess } from "../../hooks/useAccess";
+import { usePlatformStore } from "../../store/platformStore";
+import type { DataRecord } from "../../types/platform";
 
 type RecordFormInput = Omit<DataRecord, "id" | "updatedAt">;
 

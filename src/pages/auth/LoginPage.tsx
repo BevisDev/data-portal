@@ -2,12 +2,12 @@ import { useMemo } from "react";
 import { App, Button, Card, Carousel, Col, Divider, Form, Input, Row, Space, Typography } from "antd";
 import { GithubOutlined, GoogleOutlined, LockOutlined } from "@ant-design/icons";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import slideAnalytics from "../assets/slide-analytics.svg";
-import slideGovernance from "../assets/slide-governance.svg";
-import slideSecurity from "../assets/slide-security.svg";
-import { useAuthStore } from "../store/authStore";
-import { usePlatformStore } from "../store/platformStore";
-import { isSessionExpired } from "../utils/platform";
+import slideAnalytics from "../../assets/slide-analytics.svg";
+import slideGovernance from "../../assets/slide-governance.svg";
+import slideSecurity from "../../assets/slide-security.svg";
+import { useAuthStore } from "../../store/authStore";
+import { usePlatformStore } from "../../store/platformStore";
+import { isSessionExpired } from "../../utils/platform";
 
 type LocalFormInput = {
   email: string;

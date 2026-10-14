@@ -52,6 +52,19 @@ export const MOCK_SIDEBAR_MENU: SidebarMenuNode[] = [
     permission: "data:read",
   },
   {
+    key: "/notification",
+    label: "Notifications",
+    icon: "NotificationOutlined",
+    permission: "notification:read",
+    children: [
+      { key: "/notification/definitions", label: "Definitions", permission: "notification:read" },
+      { key: "/notification/templates", label: "Templates", permission: "notification:read" },
+      { key: "/notification/sources-targets", label: "Sources & Targets", permission: "notification:read" },
+      { key: "/notification/webhooks", label: "Webhooks", permission: "notification:read" },
+      { key: "/notification/send", label: "Send Test", permission: "notification:manage" },
+    ],
+  },
+  {
     key: "/users",
     label: "Users",
     icon: "TeamOutlined",
