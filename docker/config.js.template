@@ -1,0 +1,8 @@
+// Rendered at container start by docker/15-config-js.sh (envsubst) into /config.js.
+// Only the keys listed here reach the browser; keep in sync with ENV_KEYS in src/config/AppConfig.ts.
+// Unset vars render as "" and AppConfig falls back to its default.
+window.__APP_CONFIG__ = {
+  VITE_API_BASE_URL: "${VITE_API_BASE_URL}",
+  VITE_NOTIFICATION_API_BASE_URL: "${VITE_NOTIFICATION_API_BASE_URL}",
+  VITE_MENU_FROM_BACKEND: "${VITE_MENU_FROM_BACKEND}",
+};

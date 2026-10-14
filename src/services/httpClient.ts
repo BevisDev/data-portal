@@ -1,10 +1,11 @@
+import { appConfig } from "../config/AppConfig";
 import axios, { AxiosError } from "axios";
 import { useAuthStore } from "../store/authStore";
 import { useErrorStore } from "../store/errorStore";
 import { isSessionExpired } from "../utils/platform";
 
 export const httpClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
+  baseURL: appConfig.apiBaseUrl,
   timeout: 10_000,
   headers: {
     "Content-Type": "application/json",

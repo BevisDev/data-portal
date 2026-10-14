@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
+import { appConfig } from "../config/AppConfig";
 import { useErrorStore } from "../store/errorStore";
 import type {
   CreateSourceRequest,
@@ -27,7 +28,7 @@ type NotificationEnvelope<T> = {
 };
 
 export const notificationHttp = axios.create({
-  baseURL: import.meta.env.VITE_NOTIFICATION_API_BASE_URL ?? "/notification-api",
+  baseURL: appConfig.notificationApiBaseUrl,
   timeout: 15_000,
   headers: {
     "Content-Type": "application/json",

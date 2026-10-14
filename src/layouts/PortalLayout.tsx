@@ -27,11 +27,12 @@ export function PortalLayout() {
       .sort((a, b) => b.key.length - a.key.length)[0] ?? null;
   const selectedKey = selectedNode?.key ?? "/dashboard";
 
-  const openKeys = selectedKey
-    .split("/")
-    .filter(Boolean)
-    .map((_segment, index, chunks) => `/${chunks.slice(0, index + 1).join("/")}`)
-    .slice(0, -1);
+  // Max 2 levels, accordion style: one group open at a time. The selected page's group follows navigation
+  // (also once the async menu has loaded); the user can still open another group by clicking it.
+  const activeGroupKey = selectedNode?.parentKey;
+  const [toggledGroup, setToggledGroup] = useState<{ forPath: string; key: string | null } | null>(null);
+  const openGroupKey = toggledGroup?.forPath === location.pathname ? toggledGroup.key : activeGroupKey;
+  const openKeys = openGroupKey ? [openGroupKey] : [];
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -60,7 +61,10 @@ export function PortalLayout() {
           theme="dark"
           items={menuItems}
           selectedKeys={[selectedKey]}
-          defaultOpenKeys={openKeys}
+          openKeys={collapsed ? undefined : openKeys}
+          onOpenChange={(keys) =>
+            setToggledGroup({ forPath: location.pathname, key: keys.find((key) => key !== openGroupKey) ?? null })
+          }
           onClick={(event) => navigate(event.key)}
         />
       </Layout.Sider>

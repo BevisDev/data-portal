@@ -7,11 +7,18 @@ import {
   FileTextOutlined,
   NotificationOutlined,
   SafetyCertificateOutlined,
+  SettingOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
-import type { SidebarMenuNode } from "../types/navigation";
+import {
+  isMenuGroup,
+  type FlatMenuLink,
+  type RawMenuNode,
+  type SidebarMenuLink,
+  type SidebarMenuNode,
+} from "../types/navigation";
 import type { Permission } from "../types/platform";
 
 const ICON_MAP: Record<string, ReactNode> = {
@@ -22,61 +29,72 @@ const ICON_MAP: Record<string, ReactNode> = {
   FileTextOutlined: <FileTextOutlined />,
   NotificationOutlined: <NotificationOutlined />,
   SafetyCertificateOutlined: <SafetyCertificateOutlined />,
+  SettingOutlined: <SettingOutlined />,
   TeamOutlined: <TeamOutlined />,
   UserOutlined: <UserOutlined />,
 };
 
-const MAX_MENU_DEPTH = 5;
+/**
+ * Normalizes any menu tree to the 2-level shape (group → links).
+ * Anything nested below a group is lifted to level 2: only its leaf pages are kept (intermediate
+ * nodes are just folders), and a leaf without a permission inherits the nearest ancestor's one.
+ */
+const collectLeaves = (nodes: RawMenuNode[], inherited?: Permission): SidebarMenuLink[] =>
+  nodes.flatMap((node) => {
+    const permission = node.permission ?? inherited;
+    if (node.children?.length) {
+      return collectLeaves(node.children, permission);
+    }
+    return [{ key: node.key, label: node.label, icon: node.icon, permission }];
+  });
 
-const trimToDepth = (nodes: SidebarMenuNode[], depth = 1): SidebarMenuNode[] =>
-  nodes.map((node) => ({
-    ...node,
-    children:
-      depth >= MAX_MENU_DEPTH || !node.children?.length
-        ? undefined
-        : trimToDepth(node.children, depth + 1),
-  }));
+export const normalizeMenu = (nodes: RawMenuNode[]): SidebarMenuNode[] =>
+  nodes.map(({ children, ...entry }) =>
+    children?.length ? { ...entry, children: collectLeaves(children, entry.permission) } : entry,
+  );
 
+/** A link is shown when permitted; a group is shown when it still has a visible link. */
 export const filterMenuByPermission = (
   nodes: SidebarMenuNode[],
   hasPermission: (permission: Permission) => boolean,
 ): SidebarMenuNode[] => {
-  const result: SidebarMenuNode[] = [];
-
-  for (const node of nodes) {
-    const children = node.children ? filterMenuByPermission(node.children, hasPermission) : undefined;
-    const hasSelfPermission = node.permission ? hasPermission(node.permission) : true;
-    if (!hasSelfPermission && !children?.length) {
-      continue;
+  const allowed = (link: SidebarMenuLink) => !link.permission || hasPermission(link.permission);
+  return nodes.flatMap((node): SidebarMenuNode[] => {
+    if (!isMenuGroup(node)) {
+      return allowed(node) ? [node] : [];
     }
-    result.push({
-      ...node,
-      ...(children ? { children } : {}),
-    });
-  }
-
-  return result;
+    const children = node.children.filter(allowed);
+    return children.length ? [{ ...node, children }] : [];
+  });
 };
 
-export const toMenuItems = (nodes: SidebarMenuNode[]): MenuProps["items"] =>
-  nodes.map((node) => ({
-    key: node.key,
-    label: node.label,
-    icon: node.icon ? ICON_MAP[node.icon] : undefined,
-    children: node.children?.length ? toMenuItems(node.children) : undefined,
-  }));
+const iconOf = (node: SidebarMenuLink) => (node.icon ? ICON_MAP[node.icon] : undefined);
 
-export const flattenMenuNodes = (nodes: SidebarMenuNode[]): SidebarMenuNode[] =>
-  nodes.flatMap((node) => [node, ...(node.children ? flattenMenuNodes(node.children) : [])]);
+export const toMenuItems = (nodes: SidebarMenuNode[]): MenuProps["items"] =>
+  nodes.map((node) =>
+    isMenuGroup(node)
+      ? {
+          key: node.key,
+          label: node.label,
+          icon: iconOf(node),
+          children: node.children.map((child) => ({ key: child.key, label: child.label, icon: iconOf(child) })),
+        }
+      : { key: node.key, label: node.label, icon: iconOf(node) },
+  );
+
+/** Every clickable page, with its group key; groups themselves are not pages. */
+export const flattenMenuLinks = (nodes: SidebarMenuNode[]): FlatMenuLink[] =>
+  nodes.flatMap((node) =>
+    isMenuGroup(node) ? node.children.map((child) => ({ ...child, parentKey: node.key })) : [node],
+  );
 
 export const buildMenuForRender = (
-  sourceNodes: SidebarMenuNode[],
+  sourceNodes: RawMenuNode[],
   hasPermission: (permission: Permission) => boolean,
 ) => {
-  const depthSafeMenu = trimToDepth(sourceNodes, 1);
-  const filteredMenu = filterMenuByPermission(depthSafeMenu, hasPermission);
+  const tree = filterMenuByPermission(normalizeMenu(sourceNodes), hasPermission);
   return {
-    tree: filteredMenu,
-    items: toMenuItems(filteredMenu),
+    tree,
+    items: toMenuItems(tree),
   };
 };

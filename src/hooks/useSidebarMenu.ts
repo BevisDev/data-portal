@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { buildMenuForRender, flattenMenuNodes } from "../app/navigation";
+import { buildMenuForRender, flattenMenuLinks } from "../app/navigation";
 import { useAccess } from "./useAccess";
 import { menuApi } from "../services/menuApi";
-import type { SidebarMenuNode } from "../types/navigation";
+import type { RawMenuNode } from "../types/navigation";
 
 export const useSidebarMenu = () => {
   const { can } = useAccess();
-  const [rawMenu, setRawMenu] = useState<SidebarMenuNode[]>([]);
+  const [rawMenu, setRawMenu] = useState<RawMenuNode[]>([]);
 
   useEffect(() => {
     let mounted = true;
@@ -21,7 +21,7 @@ export const useSidebarMenu = () => {
   }, []);
 
   const builtMenu = useMemo(() => buildMenuForRender(rawMenu, can), [rawMenu, can]);
-  const flatNodes = useMemo(() => flattenMenuNodes(builtMenu.tree), [builtMenu.tree]);
+  const flatNodes = useMemo(() => flattenMenuLinks(builtMenu.tree), [builtMenu.tree]);
 
   return {
     menuItems: builtMenu.items,

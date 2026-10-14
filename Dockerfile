@@ -1,28 +1,32 @@
-# Build stage
-FROM node:22-alpine AS builder
-
+FROM node:24-alpine AS builder
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+# Install deps first so this layer is cached until package*.json changes.
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci --no-audit --no-fund
 
 COPY . .
+
 RUN npm run build
 
-# Runtime stage
-FROM nginx:1.27-alpine AS runtime
+# ---------- Runtime stage ----------
+# Unprivileged nginx: runs as uid 101 and listens on 8080, so it fits runAsNonRoot.
+FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+# The image's entrypoint renders /etc/nginx/templates/*.template into /etc/nginx/conf.d at start.
+COPY --chown=101:101 nginx/default.conf.template /etc/nginx/templates/default.conf.template
+COPY --from=builder --chown=101:101 /app/dist /usr/share/nginx/html
+# At start: renders the declared keys from the pod env into /tmp/config.js (served as /config.js, read by AppConfig).
+COPY docker/config.js.template /etc/data-portal/config.js.template
+COPY --chmod=755 docker/15-config-js.sh /docker-entrypoint.d/15-config-js.sh
 
-# SPA fallback for React Router + notification-service proxy.
-# The nginx image runs envsubst on /etc/nginx/templates/*.template at startup,
-# so NOTIFICATION_API_TARGET / NOTIFICATION_API_KEY are read from the container env.
-RUN mkdir -p /etc/nginx/templates && rm -f /etc/nginx/conf.d/default.conf && printf '%s
-'   'server {'   '  listen 80;'   '  server_name _;'   '  root /usr/share/nginx/html;'   '  index index.html;'   ''   '  location /notification-api/ {'   '    proxy_pass ${NOTIFICATION_API_TARGET}/notification/;'   '    proxy_set_header api-key "${NOTIFICATION_API_KEY}";'   '    proxy_set_header Host $proxy_host;'   '  }'   ''   '  location / {'   '    try_files $uri $uri/ /index.html;'   '  }'   '}' > /etc/nginx/templates/default.conf.template
+# All config is injected as env vars (k8s env / envFrom).
+# NGINX_ENTRYPOINT_LOCAL_RESOLVERS exports NGINX_LOCAL_RESOLVERS (cluster DNS) for the proxy resolver;
+# the filter limits envsubst to the variables the nginx template uses.
+ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1 \
+    NGINX_ENVSUBST_FILTER="^(NOTIFICATION_|NGINX_LOCAL_RESOLVERS)"
 
-ENV NOTIFICATION_API_TARGET=http://notification-service:8080     NOTIFICATION_API_KEY=
-ENV NGINX_ENVSUBST_FILTER=^NOTIFICATION_
-
-EXPOSE 80
+USER 101
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]

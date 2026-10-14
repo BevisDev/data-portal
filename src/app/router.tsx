@@ -28,6 +28,12 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 });
 
+const ADMIN_ROUTES = [
+  { path: "users", element: <UsersPage />, permission: "user:read" },
+  { path: "roles", element: <RolesPage />, permission: "role:read" },
+  { path: "permissions", element: <PermissionsPage />, permission: "permission:read" },
+] as const;
+
 const NOTIFICATION_ROUTES = [
   { path: "definitions", element: <DefinitionsPage />, permission: "notification:read" },
   { path: "templates", element: <TemplatesPage />, permission: "notification:read" },
@@ -59,30 +65,20 @@ export function AppRouter() {
                       </PermissionGuard>
                     }
                   />
-                  <Route
-                    path="/users"
-                    element={
-                      <PermissionGuard permission="user:read">
-                        <UsersPage />
-                      </PermissionGuard>
-                    }
-                  />
-                  <Route
-                    path="/roles"
-                    element={
-                      <PermissionGuard permission="role:read">
-                        <RolesPage />
-                      </PermissionGuard>
-                    }
-                  />
-                  <Route
-                    path="/permissions"
-                    element={
-                      <PermissionGuard permission="permission:read">
-                        <PermissionsPage />
-                      </PermissionGuard>
-                    }
-                  />
+                  <Route path="/admin">
+                    <Route index element={<Navigate to="users" replace />} />
+                    {ADMIN_ROUTES.map(({ path, element, permission }) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        element={<PermissionGuard permission={permission}>{element}</PermissionGuard>}
+                      />
+                    ))}
+                  </Route>
+                  {/* Old flat paths, kept so bookmarks still work. */}
+                  {ADMIN_ROUTES.map(({ path }) => (
+                    <Route key={`legacy-${path}`} path={`/${path}`} element={<Navigate to={`/admin/${path}`} replace />} />
+                  ))}
                   <Route path="/notification">
                     <Route index element={<Navigate to="definitions" replace />} />
                     {NOTIFICATION_ROUTES.map(({ path, element, permission }) => (

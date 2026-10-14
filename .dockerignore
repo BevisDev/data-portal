@@ -15,3 +15,9 @@ pnpm-debug.log*
 .env.*
 .cursor
 .agents
+.claude
+.mcp.json
+AGENTS.md
+CLAUDE.md
+Dockerfile
+.dockerignore
