@@ -1,6 +1,6 @@
 # data-portal nginx config. Mount at /etc/nginx/templates/default.conf.template.
 # envsubst fills ${VAR}s at start. Every var used here must exist in the pod env (empty is fine),
-# otherwise nginx fails to start. Set NGINX_ENVSUBST_FILTER=^(VITE_|NOTIFICATION_).
+# otherwise nginx fails to start. Set NGINX_ENVSUBST_FILTER=^(VITE_|PORTAL_BE_).
 
 server {
     listen 8080;
@@ -20,15 +20,14 @@ server {
         expires -1;
         return 200 'window.__APP_CONFIG__ = {
   VITE_API_BASE_URL: "${VITE_API_BASE_URL}",
-  VITE_NOTIFICATION_API_BASE_URL: "${VITE_NOTIFICATION_API_BASE_URL}",
   VITE_MENU_FROM_BACKEND: "${VITE_MENU_FROM_BACKEND}",
 };';
     }
 
-    # notification-service; the api-key is added here so it never reaches the browser.
-    location /notification-api/ {
-        proxy_pass ${NOTIFICATION_API_TARGET}/notification/;
-        proxy_set_header api-key "${NOTIFICATION_API_KEY}";
+    # portal-be; the api-key is added here so it never reaches the browser.
+    location /api/ {
+        proxy_pass ${PORTAL_BE_API_TARGET};
+        proxy_set_header api-key "${PORTAL_BE_API_KEY}";
     }
 
     # Hashed build assets: cache forever.

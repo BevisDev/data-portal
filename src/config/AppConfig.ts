@@ -10,7 +10,7 @@
  * To add a key: add it to ENV_KEYS, to the /config.js location in deploy/nginx/default.conf.template, and map it in `loadAppConfig`.
  */
 
-export const ENV_KEYS = ["VITE_API_BASE_URL", "VITE_NOTIFICATION_API_BASE_URL", "VITE_MENU_FROM_BACKEND"] as const;
+export const ENV_KEYS = ["VITE_API_BASE_URL", "VITE_MENU_FROM_BACKEND"] as const;
 
 type EnvKey = (typeof ENV_KEYS)[number];
 type Env = Partial<Record<EnvKey, string>>;
@@ -22,9 +22,9 @@ declare global {
 }
 
 export type AppConfig = {
-  /** VITE_API_BASE_URL: main platform API. */
+  /** VITE_API_BASE_URL + "/api": portal-be API. VITE_API_BASE_URL is the portal-be root (empty = same origin). */
   apiBaseUrl: string;
-  /** VITE_NOTIFICATION_API_BASE_URL: notification-service, proxied by nginx. */
+  /** VITE_API_BASE_URL + "/api/notification": notification endpoints on portal-be. */
   notificationApiBaseUrl: string;
   /** VITE_MENU_FROM_BACKEND: load the sidebar from the API instead of the built-in menu. */
   menuFromBackend: boolean;
@@ -60,9 +60,10 @@ const reader = (env: Env) => ({
 
 const loadAppConfig = (): AppConfig => {
   const env = reader(loadEnv());
+  const root = env.string("VITE_API_BASE_URL", "").replace(/\/+$/, "");
   return {
-    apiBaseUrl: env.string("VITE_API_BASE_URL", "/api"),
-    notificationApiBaseUrl: env.string("VITE_NOTIFICATION_API_BASE_URL", "/notification-api"),
+    apiBaseUrl: `${root}/api`,
+    notificationApiBaseUrl: `${root}/api/notification`,
     menuFromBackend: env.bool("VITE_MENU_FROM_BACKEND", false),
   };
 };
