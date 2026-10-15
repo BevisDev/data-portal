@@ -2,12 +2,12 @@
  * Application config, loaded once at startup from the env keys declared in ENV_KEYS — nothing else is read.
  *
  * Source of the values:
- * - Container (k8s): env vars injected into the pod. At start, docker/15-config-js.sh renders
- *   docker/config.js.template into /config.js as `window.__APP_CONFIG__` (the browser cannot read the pod env).
+ * - Container (k8s): env vars injected into the pod. nginx serves them as /config.js (`window.__APP_CONFIG__`),
+ *   see the `/config.js` location in deploy/nginx/default.conf.template (the browser cannot read the pod env).
  * - Local `npm run dev`: the project's .env, via `import.meta.env`.
  * Runtime values win over build-time ones; empty means "use the default". These values are public: no secrets.
  *
- * To add a key: add it to ENV_KEYS, to docker/config.js.template, and map it in `loadAppConfig`.
+ * To add a key: add it to ENV_KEYS, to the /config.js location in deploy/nginx/default.conf.template, and map it in `loadAppConfig`.
  */
 
 export const ENV_KEYS = ["VITE_API_BASE_URL", "VITE_NOTIFICATION_API_BASE_URL", "VITE_MENU_FROM_BACKEND"] as const;

@@ -31,6 +31,7 @@ export function UsersPage() {
     setEditingId(null);
     form.resetFields();
     form.setFieldsValue({
+      username: "",
       name: "",
       title: "",
       email: "",
@@ -97,6 +98,7 @@ export function UsersPage() {
         rowKey="id"
         dataSource={users}
         columns={[
+          { title: "Username", dataIndex: "username" },
           { title: "Name", dataIndex: "name" },
           { title: "Title", dataIndex: "title" },
           { title: "Email", dataIndex: "email" },
@@ -129,6 +131,24 @@ export function UsersPage() {
       />
       <Modal title={editingId ? "Edit User" : "New User"} open={open} onOk={() => void submit()} onCancel={() => setOpen(false)}>
         <Form form={form} layout="vertical">
+          <Form.Item
+            name="username"
+            label="Username"
+            rules={[
+              { required: true },
+              { pattern: /^[a-zA-Z0-9._-]+$/, message: "Letters, digits, '.', '_' or '-'" },
+              {
+                validator: async (_, value?: string) => {
+                  const taken = users.some(
+                    (user) => user.id !== editingId && user.username.toLowerCase() === value?.trim().toLowerCase(),
+                  );
+                  if (taken) throw new Error("Username already exists");
+                },
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>

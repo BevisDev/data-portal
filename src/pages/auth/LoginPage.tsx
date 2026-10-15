@@ -10,7 +10,7 @@ import { usePlatformStore } from "../../store/platformStore";
 import { isSessionExpired } from "../../utils/platform";
 
 type LocalFormInput = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -63,12 +63,12 @@ export function LoginPage() {
     const target = users.find(
       (user) =>
         user.provider === "local" &&
-        user.email.toLowerCase() === payload.email.toLowerCase() &&
+        user.username.toLowerCase() === payload.username.trim().toLowerCase() &&
         user.password === payload.password &&
         user.status === "active",
     );
     if (!target) {
-      message.error("Invalid local credentials.");
+      message.error("Invalid username or password.");
       return;
     }
     createSession(target.id, "local");
@@ -123,18 +123,18 @@ export function LoginPage() {
                 ) : null}
                 <Card size="small" title="Local Account">
                   <Form form={form} layout="vertical" onFinish={loginLocal}>
-                    <Form.Item name="email" label="Email" rules={[{ required: true, type: "email" }]}>
-                      <Input placeholder="owner@platform.local" />
+                    <Form.Item name="username" label="Username" rules={[{ required: true }]}>
+                      <Input placeholder="admin" autoComplete="username" autoFocus />
                     </Form.Item>
                     <Form.Item name="password" label="Password" rules={[{ required: true }]}>
-                      <Input.Password placeholder="admin123" />
+                      <Input.Password placeholder="Password" autoComplete="current-password" />
                     </Form.Item>
                     <Button htmlType="submit" type="primary" block icon={<LockOutlined />}>
                       Sign in
                     </Button>
                   </Form>
                   <Divider />
-                  <Typography.Text type="secondary">Demo: owner@platform.local/admin123</Typography.Text>
+                  <Typography.Text type="secondary">Demo: admin / admin123</Typography.Text>
                 </Card>
                 <Card size="small" title="OAuth Provider" style={{ marginTop: 16 }}>
                   <Space direction="vertical" style={{ width: "100%" }}>

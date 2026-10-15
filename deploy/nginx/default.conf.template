@@ -1,0 +1,44 @@
+# data-portal nginx config. Mount at /etc/nginx/templates/default.conf.template.
+# envsubst fills ${VAR}s at start. Every var used here must exist in the pod env (empty is fine),
+# otherwise nginx fails to start. Set NGINX_ENVSUBST_FILTER=^(VITE_|NOTIFICATION_).
+
+server {
+    listen 8080;
+    root /usr/share/nginx/html;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    location = /healthz {
+        access_log off;
+        return 200 "ok\n";
+    }
+
+    # Browser config for src/config/AppConfig.ts (keep keys in sync with ENV_KEYS). Public: no secrets.
+    location = /config.js {
+        default_type application/javascript;
+        expires -1;
+        return 200 'window.__APP_CONFIG__ = {
+  VITE_API_BASE_URL: "${VITE_API_BASE_URL}",
+  VITE_NOTIFICATION_API_BASE_URL: "${VITE_NOTIFICATION_API_BASE_URL}",
+  VITE_MENU_FROM_BACKEND: "${VITE_MENU_FROM_BACKEND}",
+};';
+    }
+
+    # notification-service; the api-key is added here so it never reaches the browser.
+    location /notification-api/ {
+        proxy_pass ${NOTIFICATION_API_TARGET}/notification/;
+        proxy_set_header api-key "${NOTIFICATION_API_KEY}";
+    }
+
+    # Hashed build assets: cache forever.
+    location /assets/ {
+        expires max;
+    }
+
+    # SPA: unknown paths serve index.html, never cached.
+    location / {
+        expires -1;
+        try_files $uri /index.html;
+    }
+}

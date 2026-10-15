@@ -32,6 +32,8 @@ export type RoleRecord = {
 
 export type UserRecord = {
   id: string;
+  /** Login name for local accounts; unique. */
+  username: string;
   name: string;
   email: string;
   provider: Provider;

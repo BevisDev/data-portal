@@ -31,6 +31,7 @@ export const INITIAL_ROLES: RoleRecord[] = [
 export const INITIAL_USERS: UserRecord[] = [
   {
     id: "usr_owner",
+    username: "admin",
     name: "Portal Owner",
     email: "owner@platform.local",
     provider: "local",
@@ -41,6 +42,7 @@ export const INITIAL_USERS: UserRecord[] = [
   },
   {
     id: "usr_data",
+    username: "data.manager",
     name: "Data Operations",
     email: "data.manager@platform.local",
     provider: "google",
@@ -50,6 +52,7 @@ export const INITIAL_USERS: UserRecord[] = [
   },
   {
     id: "usr_iam",
+    username: "iam.admin",
     name: "Access Security",
     email: "iam.admin@platform.local",
     provider: "github",
@@ -59,6 +62,7 @@ export const INITIAL_USERS: UserRecord[] = [
   },
   {
     id: "usr_viewer",
+    username: "viewer",
     name: "Business Viewer",
     email: "viewer@platform.local",
     provider: "local",
